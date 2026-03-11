@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+<!-- {% import "bootstrap/wtf.html" as wtf %} -->
+
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+
+<!-- Greeting 'Hello, name!' -->
+<div class="greeting-row">
+    <h2 class="greeting-text">Good morning, {{ user_name }}!</h2>
+</div>
+
+<div class="main-boxes">
+    <!-- BOX 1: Sleep stats -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="rg-box box-1">
+                <h4 class="box-title">Your recent sleep stats:</h4>
+                
+                <div class="row text-center stat-row">
+                    {% for item in data %}
+                    <div class="col-4 stat-boxes">
+                        <img src="{{ url_for ('static', filename=item.icon)}}" alt="{{ item.category }}" class="stat-icon">
+                        {% if item.category == 'uninterrupted' %}
+                            <p class="stat-label">{{ item.userscore }} hours of uninterrupted sleep</p>
+                        {% elif item.category == 'restlessness' %}
+                            <p class="stat-label">{{ item.userscore }} mins total recorded restlessness</p>
+                        {% elif item.category == 'environment' %}
+                            {% if item.userscore == 1 %}
+                                <p class = "stat-label">environment score low</p> 
+                            {% elif item.userscore == 2 %}
+                                <p class = "stat-label">environment score medium</p> 
+                            {% elif item.userscore == 3 %}
+                                <p class = "stat-label">environment score high</p> 
+                            {% endif %}   
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <p class="overall-score">Overall score: <strong>{{ user_overall_score | capitalize }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOX 2 (graph), 3 (alarms), 4 (goals) -->
+    <div class="row mb-3">
+
+        <!-- BOX 2: Graph (left left column in desktop, full width on phone) -->
+        <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <div class="rg-box box-2 h-100 d-flex flex-column">
+                <h4 class="box-title">Recent Overview:</h4>
+                <div class="graph-container">
+                    <!-- Placeholder image which will be replaced with actual data -->
+                    <img src="{{ url_for('static', filename='graphplaceholder.png') }}" alt="Graph" class="graph-img">
+                </div>
+                <a href="/sleep-overview" class="see-more">See more...</a>
+            </div>
+        </div>
+
+        <!-- BOX 3 + BOX 4 stacked (right column on desktop, full width on phone) -->
+        <div class="col-12 col-md-6 d-flex flex-column gap-col">
+
+            <!-- BOX 3: Alarms (all is dummy data for now)-->
+            <div class="rg-box box-3">
+                <h4 class="box-title">Alarms</h4>
+                <ul class="alarm-list">
+                    <li>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-track">
+                                <span class="toggle-label-on">ON</span>
+                                <span class="toggle-label-off">OFF</span>
+                                <span class="toggle-thumb"></span>
+                            </span>
+                        </label>
+                        <span class="alarm-time">7:15 AM</span>
+                        <span class="alarm-days">Monday - Friday</span>
+                    </li>
+                    <li>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-track">
+                                <span class="toggle-label-on">ON</span>
+                                <span class="toggle-label-off">OFF</span>
+                                <span class="toggle-thumb"></span>
+                            </span>
+                        </label>
+                        <span class="alarm-time">6:30 AM</span>
+                        <span class="alarm-days">Thursday</span>
+                    </li>
+                </ul>
+                <a href="/alarms" class="edit-link">edit</a>
+            </div>
+
+            <!-- BOX 4: Sleep goals -->
+            <div class="rg-box box-4">
+                <a href="/sleep-goals">
+                    <button class="sleep-goal-btn">Set new sleep goal</button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

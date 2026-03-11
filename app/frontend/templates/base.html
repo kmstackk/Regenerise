@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %} Regenerise {% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link href="https://fonts.googleapis.com/css?family=Lexend" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='regenerisestyle.css') }}">
+{% endblock %}
+
+
+<!-- This will be changed once I've made a logo -->
+{% block navbar %}
+<nav class="rg-navbar">
+    <div class="text-center">
+        <a href="/"><img src="{{ url_for('static', filename='regeneriselogo.svg') }}" alt="Regenerise" class="logo-img"></a>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid main-content">
+    {% block page_content %}{% endblock %}
+</div>
+
+<footer class="rg-footer">
+    <p class="footer-copyright">© 2026 Regenerise</p>
+    <a href="/account" class="footer-icon-link">
+        <img src="{{ url_for('static', filename='accountperson.svg') }}" alt="Account" class="footer-icon-img">
+    </a>
+    <a href="/settings" class="footer-icon-link">
+        <img src="{{ url_for('static', filename='settings.svg') }}" alt="Settings" class="footer-icon-img">
+    </a>
+</footer>
+{% endblock %}
