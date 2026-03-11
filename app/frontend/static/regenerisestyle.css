@@ -1,0 +1,293 @@
+/* COLOUR CODES */
+:root {
+    --bg-dark: #0d1b3e;     /* page background */
+    --bg-box: #c8d8f0;      /* card/box backgrounds */
+    --bg-navbar: #c8d9f7;
+    --white-text: #eaecee;   
+    --black-text: #000000;
+    --toggle-on: #0a183d;
+    --toggle-off: #909090;
+    --goal-button: #0a183d;
+    --lighter-box: #e5ebf4;
+    --radius-box: 18px;
+    --radius-btn: 50px;
+}
+
+body {
+    background-color: var(--bg-dark);
+    font-family: 'Lexend', Verdana, Geneva, Tahoma, sans-serif;
+    color: var(--black-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-boxes {
+    padding: 0rem 3.8rem;
+}
+
+.rg-navbar {
+    background-color: var(--bg-navbar);
+    padding: 0.9rem 1.5rem;
+    text-align: center;
+}
+
+.logo-img {
+    max-height: 60px;
+    padding: 0.5rem;
+}
+
+.main-content {
+    background-color: var(--bg-dark);
+    padding: 1.2rem 1rem 1.5rem 1rem;
+    flex: 1;
+}
+
+.greeting-row {
+    padding: 2rem 2.7rem 1.2rem 2.7rem;
+}
+
+.greeting-text {
+    color: var(--white-text);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Main 4 boxes */
+.rg-box {
+    background-color: var(--bg-box);
+    border-radius: var(--radius-box);
+    padding: 0.7rem 3rem;    /* top, right, bottom, left inside */
+    color: var(--black-text);
+}
+
+.box-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--black-text);
+    margin-bottom: 1rem;
+}
+
+/* BOX 1: Sleep stats */
+.box-1 {
+    margin: 1rem 1.3rem 2.2rem 1.3rem;   /* top/bottom, left/right */
+}
+
+.stat-row {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 2rem 0rem 2rem;   /* top, right, bottom, left inside */
+}
+
+.stat-boxes {
+    padding: 1rem 1.5rem ;
+}
+
+.stat-icon {
+    width: 52px;
+}
+
+.stat-label {
+    font-size: 1.6rem;
+    font-weight: 500;
+    padding: 0.5rem;
+}
+
+.overall-score {
+    font-size: 2rem;
+    color: var(--black-text);
+}
+
+/* BOX 2: graph */
+.box-2 {
+    margin: 0rem 0rem 2.2rem 0rem;
+}
+
+.graph-container {
+    flex: 1;    /* extends graph to fill remaining height */
+    margin: 1.5rem 0rem 1.2rem 0rem;
+}
+
+.graph-img {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+}
+
+.see-more {
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--black-text);
+    display: block;
+    margin: 0rem 0rem 0.8rem 0rem;
+}
+
+.see-more:hover {
+    text-decoration: underline;
+}
+
+/* gap between stacked boxes 3 & 4 */
+/* .gap-col {
+    gap: 0.75rem;
+} */
+
+/* BOX 3: alarm toggles */
+.box-3 {
+    margin: 0rem 0rem 2.2rem 0rem; /*1rem 2rem 1rem 0rem;*/ 
+}
+
+.alarm-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alarm-list li {
+    display: flex;
+    padding: 0.5rem 0rem;
+    align-items: center;
+}
+
+.alarm-time {
+    padding: 0rem 1.3rem 0rem 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.alarm-days {
+    padding: 0rem;
+    font-size: 1.7rem;
+    font-style: italic;
+}
+
+.edit-link {
+    display: block;
+    text-align: right;
+    color: var(--black-text);
+    font-style: italic;
+}
+
+.edit-link:hover {
+    text-decoration: underline;
+}
+
+/* BOX 4: sleep goal */
+.box-4 {
+    margin: 0rem 0rem 2.2rem 0rem; 
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.sleep-goal-btn {
+    background-color: var(--goal-button);
+    color: var(--white-text);
+    font-size: 1.8rem;
+    border-radius: var(--radius-btn);
+    border-style: solid;
+    border-color: var(--lighter-box);
+    padding: 0.5rem 1.8rem;
+}
+
+.sleep-goal-btn:hover {
+    opacity: 0.85;
+}
+
+/* Footer */
+.footer {
+    color: var(--bg-box);
+}
+
+
+
+
+
+/* ── iOS-STYLE TOGGLE SWITCH ──
+   This replaces the old ON/OFF badge spans with a real pill toggle.
+
+   How it works:
+   - The actual <input type="checkbox"> is hidden (opacity: 0, size 0)
+   - The visible toggle is the <span class="toggle-track"> which is
+     styled as a pill shape
+   - The <span class="toggle-thumb"> is the white circle that slides
+   - The ON/OFF labels inside the track show/hide based on checked state
+   - CSS :checked selector on the hidden input controls all the visual changes
+     via the adjacent sibling (~) selector
+*/
+.toggle-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* Hide the real checkbox */
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+/* The pill-shaped track */
+.toggle-track {
+    display: flex;
+    align-items: center;
+    width: 72px;
+    height: 32px;
+    border-radius: 50px;
+    background-color: var(--toggle-off);   /* grey when OFF */
+    /* padding: 0 6px; */
+    position: relative;
+    transition: background-color 0.25s;
+    cursor: pointer;
+}
+
+/* When checkbox is checked, track turns dark navy */
+.toggle-switch input:checked ~ .toggle-track {
+    background-color: var(--toggle-on);
+}
+
+/* The sliding white circle (thumb) */
+.toggle-thumb {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--lighter-box);
+    left: 4px;                    /* starts on the left (OFF position) */
+    transition: left 0.25s;
+}
+
+/* Slide thumb to the right when checked (ON) */
+.toggle-switch input:checked ~ .toggle-track .toggle-thumb {
+    left: 44px;
+}
+
+/* "ON" and "OFF" text labels inside the track */
+.toggle-label-on,
+.toggle-label-off {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    pointer-events: none;
+    user-select: none;
+}
+
+.toggle-label-on {
+    left: 10px;
+    opacity: 0;           /* hidden when OFF */
+}
+
+.toggle-label-off {
+    right: 8px;
+    opacity: 1;           /* visible when OFF */
+}
+
+/* When checked: show ON, hide OFF */
+.toggle-switch input:checked ~ .toggle-track .toggle-label-on  { opacity: 1; }
+.toggle-switch input:checked ~ .toggle-track .toggle-label-off { opacity: 0; }
