@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+  <h1>Sensor Data</h1>
+
+  <p>Temperature: <span id="temp">Loading...</span></p>
+  <p>Humidity: <span id="hum">Loading...</span></p>
+
+  <script>
+    async function loadData() {
+      const res = await fetch('/api/data');
+      const data = await res.json();
+
+      document.getElementById('temp').textContent = data.temperature;
+      document.getElementById('hum').textContent = data.humidity;
+    }
+
+    loadData();
+    setInterval(loadData, 5000);
+  </script>
+</body>
+</html>
