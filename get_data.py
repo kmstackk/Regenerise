@@ -26,7 +26,7 @@ with open("data.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerow(["timestamp", "temperature", "humidity"])
 
-print("🚀 Logging started... Press CTRL+C to stop")
+print(" Logging started... Press CTRL+C to stop")
 
 while True:
     try:
