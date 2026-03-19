@@ -2,7 +2,7 @@ import requests
 import csv
 import time
 
-# 🔥 YOUR DETAILS
+# YOUR DETAILS
 BASE_URL = "https://thingsboard.cs.cf.ac.uk"
 USERNAME = "group05@cardiff.ac.uk"
 PASSWORD = "group052026"
