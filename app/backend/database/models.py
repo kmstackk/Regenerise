@@ -20,14 +20,8 @@ class Device(db.Model):
 
     location = db.relationship("Location", back_populates="devices")
     firmware_version = db.relationship("FirmwareVersion", back_populates="devices")
-
-    sensors = db.relationship("Sensor", back_populates="device")
-    alarms = db.relationship("Alarm", back_populates="device")
-    device_configurations = db.relationship("DeviceConfiguration", back_populates="device")
-    device_status_logs = db.relationship("DeviceStatusLog", back_populates="device")
-    sleep_sessions = db.relationship("SleepSession", back_populates="device")
-    alarm_events = db.relationship("AlarmEvent", back_populates="device")
-
+    device_configurations = db.relationship("DeviceConfiguration", back_populates="devices)
+    sensors = db.relationship("Sensor", back_populates="devices)
 
 class Sensor(db.Model):
     __tablename__ = "sensors"
