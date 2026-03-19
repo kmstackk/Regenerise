@@ -12,7 +12,7 @@ class Device(db.Model):
     device_type = db.Column(db.String(50))
     serial_number = db.Column(db.String(100), unique=True)
     status = db.Column(db.String(50))
-    registered_at = db.Column(db.DateTime, default=datetime.utcnow)
+    registered_at = db.Column(db.DateTime)
     last_seen = db.Column(db.DateTime)
 
     location_id = db.Column(db.Integer, db.ForeignKey("locations.id"))
@@ -74,7 +74,7 @@ class DeviceConfiguration(db.Model):
     sampling_interval = db.Column(db.Integer)
     data_upload_interval = db.Column(db.Integer)
     sleep_detection_mode = db.Column(db.String(50))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
@@ -89,7 +89,7 @@ class DeviceStatusLog(db.Model):
     cpu_temp = db.Column(db.Float)
     wifi_strength = db.Column(db.Integer)
     uptime = db.Column(db.Integer)
-    recorded_at = db.Column(db.DateTime, default=datetime.utcnow)
+    recorded_at = db.Column(db.DateTime)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
@@ -104,7 +104,7 @@ class Alarm(db.Model):
     enabled = db.Column(db.Boolean)
     smart_wakeup_window = db.Column(db.Integer)
     repeat_days = db.Column(db.String(50))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
@@ -135,7 +135,7 @@ class SleepSession(db.Model):
     end_time = db.Column(db.DateTime)
     total_sleep_minutes = db.Column(db.Integer)
     sleep_efficiency = db.Column(db.Float)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
