@@ -22,9 +22,22 @@ data = [
 def homePage():
     return render_template('home.html', data=data, user_name="Name", user_overall_score="excellent")
 
-# @app.route('/regenerise/<int:pageID>')
-# def singleProductPage(pageID):
-#     return render_template('newPage.html', data = data)
+@app.route('/regenerise/sleep-stats')
+def statsPage():
+    return render_template('stats.html', data=data)
+
+@app.route('/regenerise/recent-overview')
+def overviewPage():
+    return render_template('overview.html', data=data)
+
+
+@app.route('/regenerise/alarms')
+def alarmPage():
+    return render_template('alarms.html', data=data)
+
+@app.route('/regenerise/sleep-goals')
+def goalPage():
+    return render_template('goals.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
