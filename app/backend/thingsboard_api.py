@@ -1,20 +1,17 @@
 import os
 import requests
-from dotenv import load_dotenv
-load_dotenv()
+
 
 TOKEN_URL = "https://thingsboard.cs.cf.ac.uk/api/auth/login"
 TELEMETRY_URL = "https://thingsboard.cs.cf.ac.uk/api/plugins/telemetry/DEVICE"
+USERNAME = "group05@cardiff.ac.uk"
+PASSWORD = "group052026"
 
 
 def get_token():
-    
-    # username and pwd are stored in a separate .env file (best practice)
-    username = os.getenv("TB_USERNAME")
-    password = os.getenv("TB_PASSWORD")
 
-    response = requests.post(TOKEN_URL, json={"username": username,
-                                           "password": password})
+    response = requests.post(TOKEN_URL, json={"username": USERNAME,
+                                           "password": PASSWORD})
     
     return response.json()["token"]
 
