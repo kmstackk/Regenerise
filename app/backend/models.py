@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask import Flask
 
 db = SQLAlchemy()
 
@@ -24,20 +25,21 @@ class Device(db.Model):
     # relationships
     location = db.relationship("Location", back_populates="devices")
     firmware_version = db.relationship("FirmwareVersion", back_populates="devices")
-    device_configurations = db.relationship("DeviceConfiguration", back_populates="devices")
-    sensors = db.relationship("Sensor", back_populates="devices")
+    device_configurations = db.relationship("DeviceConfiguration", back_populates="device")
+    sensors = db.relationship("Sensor", back_populates="device")
     device_status_logs = db.relationship("DeviceStatusLog", back_populates="device")
     alarms = db.relationship("Alarm", back_populates="device")
     alarm_events = db.relationship("AlarmEvent", back_populates="device")
     sleep_sessions = db.relationship("SleepSession", back_populates="device")
+    sensor_data = db.relationship("SensorData", back_populates="device")  # added
 
 # sensor table
 class Sensor(db.Model):
     __tablename__ = "sensors"
 
-    # sensor primary key
+    # sensor primary key
     id = db.Column(db.Integer, primary_key=True)
-    #columns
+    # columns
     model = db.Column(db.String(100))
     sampling_rate = db.Column(db.Integer)
     status = db.Column(db.String(50))
@@ -56,7 +58,7 @@ class SensorType(db.Model):
 
     # sensor type primary key
     id = db.Column(db.Integer, primary_key=True)
-    # columns
+    # columns
     name = db.Column(db.String(100))
     description = db.Column(db.String(255))
 
@@ -71,13 +73,13 @@ class SensorType(db.Model):
 class MeasurementUnit(db.Model):
     __tablename__ = "measurement_units"
 
-    # measurement unit primary key
+    # measurement unit primary key
     id = db.Column(db.Integer, primary_key=True)
-    #columns
+    # columns
     unit_name = db.Column(db.String(50))
     symbol = db.Column(db.String(10))
 
-    # relationship
+    # relationship
     sensor_types = db.relationship("SensorType", back_populates="measurement_unit")
 
 # device configuration table
@@ -104,7 +106,7 @@ class DeviceStatusLog(db.Model):
 
     # device status log primary key
     id = db.Column(db.Integer, primary_key=True)
-    # columns
+    # columns
     battery_level = db.Column(db.Float)
     cpu_temp = db.Column(db.Float)
     wifi_strength = db.Column(db.Integer)
@@ -121,7 +123,7 @@ class DeviceStatusLog(db.Model):
 class Alarm(db.Model):
     __tablename__ = "alarms"
 
-    # alarm primary key
+    # alarm primary key
     id = db.Column(db.Integer, primary_key=True)
     # columns
     alarm_time = db.Column(db.Time)
@@ -198,7 +200,7 @@ class SleepScore(db.Model):
 class SleepMetricType(db.Model):
     __tablename__ = "sleep_metric_types"
 
-    # sleep metic type table
+    # sleep metric type table
     id = db.Column(db.Integer, primary_key=True)
     # columns
     name = db.Column(db.String(100))
@@ -217,11 +219,11 @@ class SleepMetricScore(db.Model):
     score = db.Column(db.Float)
     raw_value = db.Column(db.Float)
 
-    # foreign keys
+    # foreign keys
     sleep_score_id = db.Column(db.Integer, db.ForeignKey("sleep_scores.id"))
     metric_type_id = db.Column(db.Integer, db.ForeignKey("sleep_metric_types.id"))
 
-    # relationhsips
+    # relationships
     sleep_score = db.relationship("SleepScore", back_populates="sleep_metric_scores")
     metric_type = db.relationship("SleepMetricType", back_populates="sleep_metric_scores")
 
@@ -254,7 +256,8 @@ class Location(db.Model):
 
     # relationships
     devices = db.relationship("Device", back_populates="location")
-    #sensordata table
+
+# sensor data table
 class SensorData(db.Model):
     __tablename__ = "sensor_data"
 
@@ -269,7 +272,8 @@ class SensorData(db.Model):
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
-    from flask import Flask
+    device = db.relationship("Device", back_populates="sensor_data")  # added
+
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
