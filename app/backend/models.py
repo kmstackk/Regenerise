@@ -254,3 +254,25 @@ class Location(db.Model):
 
     # relationships
     devices = db.relationship("Device", back_populates="location")
+    #sensordata table
+class SensorData(db.Model):
+    __tablename__ = "sensor_data"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    timestamp = db.Column(db.BigInteger)
+    temperature = db.Column(db.Integer)
+    humidity = db.Column(db.Integer)
+    light = db.Column(db.Integer)
+    sound = db.Column(db.Integer)
+    distance = db.Column(db.Integer)
+
+    device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
+
+    from flask import Flask
+
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db.init_app(app)
