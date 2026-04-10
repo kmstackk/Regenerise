@@ -12,7 +12,7 @@ class Device(db.Model):
     # columns
     device_name = db.Column(db.String(100))
     device_type = db.Column(db.String(50))
-    serial_number = db.Column(db.String(100), unique=True)
+    serial_number = db.Column(db.String(25), unique=True)
     status = db.Column(db.String(50))
     registered_at = db.Column(db.DateTime)
     last_seen = db.Column(db.DateTime)
