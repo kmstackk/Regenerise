@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+<!-- {% import "bootstrap/wtf.html" as wtf %} -->
+
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+
+<div class="greeting-row">
+    <h2 class="greeting-text">Sleep Goals</h2>
+</div>
+
+<div class="main-boxes">
+
+    <div clqss="rg-box goals-box">
+        
+        <!-- Goal not yet set, user_goal is None -->
+        {% if not user_goal %}
+        <form method="POST" action="/set-goal">
+            <select name="goal" class="goal-dropdown" onchange="this.form.submit()">
+                <option value="" disabled selected>Set new sleep goal</option>
+                <option value="circadian">Align circadian rhythm</option>
+                <option value="deep_sleep">Increase deep sleep</option>
+            </select>" 
+        </form>
+
+        <!-- User already chosen a goal, show dashboard -->
+        {% else %}
+        <div class="goal-header-row">
+            <span class="your-goal-label">Your goal:</span>
+            
+            <!-- Same form but this time chosen goal defaulted -->
+            <form method="POST" action="/set-goal">
+                <select name="goal" class="goal-dropdown" onchange="this.form.submit()">
+                    <option value="circadian" {% if user_goal == 'circadian' %}selected{% endif %}>Circadian rhythm alignment</option>
+                    <option value="deep_sleep" {% if user_goal == 'deep_sleep' %}selected{% endif %}>Deep sleep improvement</option>
+                </select>" 
+            </form>
+
+            <!-- Information button -->
+            <button class="help-btn" title="What does this goal mean?">?</button>
+
+        </div>
+
+        <!-- Donut chart and metrics -->
+        <div class="goal-dashboard">
+
+            <!-- LEFT is a donut chart drawn with SVG representing percentage success of goal -->
+            <div class="chart-wrapper">
+                <svg class="donut-svg" viewBox="0 0 100 100">
+                    <!-- Inner (variable) and outer (background) rings -->
+                    <circle class="donut-bg" cx="50" cy="50" r="38"/>
+                    <circle class="donut-fill" cx="50" r="38" stroke-dasharray="{{ goal_progress | default(246) }} {{ 283 - (goal_progress | default(246)) }}" stroke-dashoffset="71"/>
+                    <!-- Default numbers are 87 / 246 (cause 87% of full circumference 283 is 246) / 37 (the rest/grey gap)) -->
+                </svg>
+                <!-- Percentage in center -->
+                <div class="donut-label">{{ goal_percent | default(87) }}%</div>
+            </div>
+
+            <!-- RIGHT is breakdown of each metric -->
+            <div class="goal-metrics">
+
+                {% if user_goal == 'circadian' %}
+                    <p class="metric-heading">Consistent sleep schedule:
+                        {% if metrics.schedule_rating %}
+                            <span class="metric-value">{{ metrics.schedule_rating }}</span>
+                        {% else %}
+                            <span class="metric-value metric-missing">NOT PROVIDED</span>
+                        {% endif %}
+                    </p>
+
+                    <p class="metric-value">Regular wake time:
+                        {% if metrics.wake_time %}
+                            {{ metrics.wake_time }}
+                        {% else %}
+                            <em class="metric-missing">not enough data</em>
+                        {% endif %}
+                    </p>
+                    <p class="metric-value">Regular sleep time:
+                        {% if metrics.sleep_time %}
+                            {{ metrics.sleep_time }}
+                        {% else %}
+                            <em class="metric-missing">not enough data</em>
+                        {% endif %}
+                    </p>
+
+                    <p class="metric-heading">Daily natural light average:
+                        {% if metrics.light_hours is not none %}
+                            <span class="metric-value">{{ metrics.light_hours }} hours</span>>
+                        {% else %}
+                            <span class="metric-value metric-missing">NOT PROVIDED</span>
+                        {% endif %}
+                    </p>
+
+                    <p class="metric-heading">Meal time consistency:
+                        <span class="metric-value metric-missing">
+                            {{ metrics.meal_consistency or 'NOT PROVIDED' }}
+                        </span>
+                    </p>
+                    <p class="metric-heading">Regular exercise:
+                        <span class="metric-value metric-missing">
+                            {{ metrics.exercise or 'NOT PROVIDED' }}
+                        </span>
+                    </p>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+{% endblock %}
