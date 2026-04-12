@@ -32,6 +32,7 @@ class Device(db.Model):
     alarm_events = db.relationship("AlarmEvent", back_populates="device")
     sleep_sessions = db.relationship("SleepSession", back_populates="device")
     sensor_data = db.relationship("SensorData", back_populates="device")  # added
+    user_goal = db.relationship("UserGoal", back_populates="device", uselist=False) # added
 
 # sensor table
 class Sensor(db.Model):
@@ -274,6 +275,24 @@ class SensorData(db.Model):
 
     device = db.relationship("Device", back_populates="sensor_data")  # added
 
+# sleep goal table
+class UserGoal(db.Model):
+    __tablename__ = "user_goals"
+    
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+
+    # columns
+    goal = db.Column(db.String(50), nullable=True)   # NULL = no goal chosen
+    goal_percent = db.Column(db.Integer, default=0)        # 0-100 for donut chart
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # foreign key tieing this goal row to specific device 
+    device_id = db.Column(db.Integer, db.ForeignKey("devices.id"), unique=True)
+    
+    # relationships
+    device = db.relationship("Device", back_populates="user_goal")
+ 
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
