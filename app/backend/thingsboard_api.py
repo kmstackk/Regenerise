@@ -1,11 +1,13 @@
+from dotenv import load_dotenv
 import os
 import requests
 
+load_dotenv()
 
-TOKEN_URL = "https://thingsboard.cs.cf.ac.uk/api/auth/login"
-TELEMETRY_URL = "https://thingsboard.cs.cf.ac.uk/api/plugins/telemetry/DEVICE"
-USERNAME = "group05@cardiff.ac.uk"
-PASSWORD = "group052026"
+TOKEN_URL = os.getenv("TOKEN_URL")
+TELEMETRY_URL = os.getenv("TELEMETRY_URL")
+USERNAME = os.getenv("USERNAME")
+PASSWORD = os.getenv("PASSWORD")
 
 
 def get_token():

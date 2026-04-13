@@ -28,23 +28,5 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/api/data")
-def get_thingsboard_data():
-
-    try:
-        payload = thingsboard_api.get_telemetry(TB_DEVICE_ID)
-        save_sensor_readings(TB_DEVICE_ID, payload)
-        return {"status": "ok"}, 200
-
-    except KeyError as e:
-            return {"error": f"missing field in payload: {e}"}, 422
-
-    except requests.HTTPError as e:
-        return {"error": f"ThingsBoard request failed: {e}"}, 502
-
-    except Exception as e:
-        return {"error": str(e)}, 500
-
-
 if __name__ == "__main__":
     app.run(debug=True)

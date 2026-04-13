@@ -8,8 +8,12 @@ sys.path.insert(0, backend_path)
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
+from app.backend.models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
 from datetime import datetime
+
+# telemtry
+from app.backend.thingsboard_api import get_telemetry
+from app.backend.get_device_data import save_sensor_readings
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -97,6 +101,25 @@ def homePage():
     overall = get_overall_score(DEVICE_ID)
     alarms = Alarm.query.filter_by(device_id=DEVICE_ID).all()
     return render_template('home.html', data=sleep_data, user_name=name, user_overall_score=overall, alarms=alarms)
+
+
+@app.route("/api/data")
+def get_thingsboard_data():
+
+    try:
+        payload = get_telemetry(TB_DEVICE_ID)
+        save_sensor_readings(TB_DEVICE_ID, payload)
+        return {"status": "ok"}, 200
+
+    except KeyError as e:
+            return {"error": f"missing field in payload: {e}"}, 422
+
+    except requests.HTTPError as e:
+        return {"error": f"ThingsBoard request failed: {e}"}, 502
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+
 
 @app.route('/regenerise/sleep-stats')
 def statsPage():
