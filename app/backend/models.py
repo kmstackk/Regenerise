@@ -265,11 +265,12 @@ class SensorData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     timestamp = db.Column(db.BigInteger)
-    temperature = db.Column(db.Integer)
-    humidity = db.Column(db.Integer)
+    temperature = db.Column(db.Float)    
+    humidity = db.Column(db.Float)       
     light = db.Column(db.Integer)
     sound = db.Column(db.Integer)
     distance = db.Column(db.Integer)
+    motion = db.Column(db.Boolean)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
