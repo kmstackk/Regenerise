@@ -51,17 +51,22 @@ def save_sensor_readings(device_id, payload):
 
     device = get_or_create_device(device_id)
 
-    sensor_data = SensorData(
-        timestamp = payload[0]["temperature"]["ts"],
-        temperature = payload[0]["temperature"],
-        humidity = payload[0]["humidity"],
-        light = payload[0]["light"],
-        sound = payload[0]["sound"],
-        distance = payload[0]["distance"],
-        motion = payload[0]["motion"],
-        
-        device=device
-    )
+    try:
+        sensor_data = SensorData(
+            timestamp = payload[0]["temperature"]["ts"],
+            temperature = payload[0]["temperature"],
+            humidity = payload[0]["humidity"],
+            light = payload[0]["light"],
+            sound = payload[0]["sound"],
+            distance = payload[0]["distance"],
+            motion = payload[0]["motion"],
+            
+            device=device
+        )
 
-    db.session.add(sensor_data)
-    db.session.commit()
+        db.session.add(sensor_data)
+        db.session.commit()
+    
+    except Exception as e:
+        db.session.rollback()
+        raise e
