@@ -8,12 +8,12 @@ sys.path.insert(0, backend_path)
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from app.backend.models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
+from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
 from datetime import datetime
 
 # telemtry
-from app.backend.thingsboard_api import get_telemetry
-from app.backend.get_device_data import save_sensor_readings
+from thingsboard_api import get_telemetry
+from get_device_data import save_sensor_readings
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
