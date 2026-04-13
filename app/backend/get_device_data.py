@@ -52,13 +52,13 @@ def save_sensor_readings(device_id, payload):
     device = get_or_create_device(device_id)
 
     sensor_data = SensorData(
-        timestamp = payload["ts"],
-        temperature = payload["temperature"],
-        humidity = payload["humidity"],
-        light = payload["light"],
-        sound = payload["sound"],
-        distance = payload["distance"],
-        motion = payload["motion"],
+        timestamp = payload[0]["temperature"]["ts"],
+        temperature = payload[0]["temperature"],
+        humidity = payload[0]["humidity"],
+        light = payload[0]["light"],
+        sound = payload[0]["sound"],
+        distance = payload[0]["distance"],
+        motion = payload[0]["motion"],
         
         device=device
     )

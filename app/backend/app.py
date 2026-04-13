@@ -1,8 +1,9 @@
 import os
 import requests
+import thingsboard_api
+from get_device_data import save_sensor_readings
 from flask import Flask, render_template, jsonify
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from models import (
     db,
@@ -15,40 +16,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db.init_app(app)
 migrate = Migrate(app, db)
 
+# TODO: switch to a .env - best practice
 TB_BASE_URL = os.getenv("TB_BASE_URL")
 TB_USERNAME = os.getenv("TB_USERNAME")
 TB_PASSWORD = os.getenv("TB_PASSWORD")
 TB_DEVICE_ID = os.getenv("TB_DEVICE_ID")
-
-
-def get_token():
-    url = f"{TB_BASE_URL}/api/auth/login"
-    response = requests.post(
-        url,
-        json={
-            "username": TB_USERNAME,
-            "password": TB_PASSWORD
-        }
-    )
-    response.raise_for_status()
-    return response.json()["token"]
-
-
-def get_latest_telemetry():
-    token = get_token()
-    url = f"{TB_BASE_URL}/api/plugins/telemetry/DEVICE/{TB_DEVICE_ID}/values/timeseries"
-
-    headers = {
-        "X-Authorization": f"Bearer {token}"
-    }
-
-    params = {
-        "keys": "temperature,humidity"
-    }
-
-    response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-    return response.json()
 
 
 @app.route("/")
@@ -57,19 +29,21 @@ def index():
 
 
 @app.route("/api/data")
-def api_data():
-    raw = get_latest_telemetry()
+def get_thingsboard_data():
 
-    def latest_value(key):
-        values = raw.get(key, [])
-        if not values:
-            return None
-        return values[0].get("value")
+    try:
+        payload = thingsboard_api.get_telemetry(TB_DEVICE_ID)
+        save_sensor_readings(TB_DEVICE_ID, payload)
+        return {"status": "ok"}, 200
 
-    return jsonify({
-        "temperature": latest_value("temperature"),
-        "humidity": latest_value("humidity")
-    })
+    except KeyError as e:
+            return {"error": f"missing field in payload: {e}"}, 422
+
+    except requests.HTTPError as e:
+        return {"error": f"ThingsBoard request failed: {e}"}, 502
+
+    except Exception as e:
+        return {"error": str(e)}, 500
 
 
 if __name__ == "__main__":
