@@ -9,7 +9,7 @@ from flask import Flask, render_template, session, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
-from datetime import datetime
+from datetime import datetime, timezone
 
 # telemtry
 from thingsboard_api import get_telemetry
@@ -153,7 +153,7 @@ def setGoal():
     # Line to get the current goal value from the database. (1) references the user whose id column equals 1. If no row exists it returns None.
     user_goal = get_or_create_user_goal(DEVICE_ID)
     user_goal.goal = chosen_goal # updates database 'goal' column
-    user_goal.updated_at = datetime.utcnow()
+    user_goal.updated_at = datetime.now(timezone.utc)
     db.session.commit()
 
     return redirect(url_for('goalsPage'))
