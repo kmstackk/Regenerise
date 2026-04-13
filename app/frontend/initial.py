@@ -107,15 +107,9 @@ def homePage():
 def get_thingsboard_data():
 
     try:
-        payload = get_telemetry(TB_DEVICE_ID)
-        save_sensor_readings(TB_DEVICE_ID, payload)
+        payload = get_telemetry()
+        save_sensor_readings(DEVICE_ID, payload)
         return {"status": "ok"}, 200
-
-    except KeyError as e:
-            return {"error": f"missing field in payload: {e}"}, 422
-
-    except requests.HTTPError as e:
-        return {"error": f"ThingsBoard request failed: {e}"}, 502
 
     except Exception as e:
         return {"error": str(e)}, 500

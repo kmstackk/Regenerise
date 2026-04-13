@@ -6,6 +6,7 @@ load_dotenv()
 
 TOKEN_URL = os.getenv("TOKEN_URL")
 TELEMETRY_URL = os.getenv("TELEMETRY_URL")
+TB_DEVICE_ID = os.getenv("TB_DEVICE_ID")
 USERNAME = os.getenv("USERNAME")
 PASSWORD = os.getenv("PASSWORD")
 
@@ -34,7 +35,7 @@ def get_keys(device_id, token):
     return keys
 
 
-def get_telemetry(device_id, keys=""):
+def get_telemetry(device_id=TB_DEVICE_ID, keys=""):
     """
     device_id: str
     keys: str ("temperature,humidity,...")
