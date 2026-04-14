@@ -11,7 +11,7 @@
 
 <div class="main-boxes">
 
-    <div clqss="rg-box goals-box">
+    <div class="rg-box goals-box">
         
         <!-- Goal not yet set, user_goal is None -->
         {% if not user_goal %}
@@ -33,7 +33,7 @@
                 <select name="goal" class="goal-dropdown" onchange="this.form.submit()">
                     <option value="circadian" {% if user_goal == 'circadian' %}selected{% endif %}>Circadian rhythm alignment</option>
                     <option value="deep_sleep" {% if user_goal == 'deep_sleep' %}selected{% endif %}>Deep sleep improvement</option>
-                </select>" 
+                </select>
             </form>
 
             <!-- Information button -->
@@ -46,14 +46,17 @@
 
             <!-- LEFT is a donut chart drawn with SVG representing percentage success of goal -->
             <div class="chart-wrapper">
-                <svg class="donut-svg" viewBox="0 0 100 100">
+                <svg class="donut-svg" viewBox="0 0 40 40">
                     <!-- Inner (variable) and outer (background) rings -->
-                    <circle class="donut-bg" cx="50" cy="50" r="38"/>
-                    <circle class="donut-fill" cx="50" r="38" stroke-dasharray="{{ goal_progress | default(246) }} {{ 283 - (goal_progress | default(246)) }}" stroke-dashoffset="71"/>
-                    <!-- Default numbers are 87 / 246 (cause 87% of full circumference 283 is 246) / 37 (the rest/grey gap)) -->
+                    <circle class="donut-hole" cx="20" cy="20" r="15.91549430918954"/>
+                    <circle class="donut-ring" cx="20" cy="20" r="15.91549430918954"/>
+                    <circle class="donut-segment" cx="20" cy="20" r="15.91549430918954" 
+                    stroke-dasharrays="{{ goal_percent | default (87) }} {{ 100 - (goal_percent | default(87)) }}" 
+                    stroke-dashoffset="25"/>
+                    
+                    <!-- Percentage in center -->
+                    <text class="donut-percent-text" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">{{ goal_percent | default(87) }}%</text>
                 </svg>
-                <!-- Percentage in center -->
-                <div class="donut-label">{{ goal_percent | default(87) }}%</div>
             </div>
 
             <!-- RIGHT is breakdown of each metric -->
@@ -68,14 +71,14 @@
                         {% endif %}
                     </p>
 
-                    <p class="metric-value">Regular wake time:
+                    <p class="metric-value metric-sub">Regular wake time:
                         {% if metrics.wake_time %}
                             {{ metrics.wake_time }}
                         {% else %}
-                            <em class="metric-missing">not enough data</em>
+                            <em class="metric-value metric-missing">not enough data</em>
                         {% endif %}
                     </p>
-                    <p class="metric-value">Regular sleep time:
+                    <p class="metric-value metric-sub">Regular sleep time:
                         {% if metrics.sleep_time %}
                             {{ metrics.sleep_time }}
                         {% else %}
@@ -85,7 +88,7 @@
 
                     <p class="metric-heading">Daily natural light average:
                         {% if metrics.light_hours is not none %}
-                            <span class="metric-value">{{ metrics.light_hours }} hours</span>>
+                            <span class="metric-value">{{ metrics.light_hours }} hours</span>
                         {% else %}
                             <span class="metric-value metric-missing">NOT PROVIDED</span>
                         {% endif %}

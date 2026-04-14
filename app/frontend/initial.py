@@ -136,14 +136,14 @@ def goalsPage():
 
     # currently hardcoded, replace with real DB queries when we get to that
     metrics = {
-        "schedule_rating": "Good",
-        "wake_time": "8:15 am",
-        "sleep_time": "10:30 pm", 
+        "schedule_rating": "Good", # db sleep consistency score
+        "wake_time": "8:15 am", # db SleepSession.end_time
+        "sleep_time": "10:30 pm", # db SleepSession.start_time
         "light_hours": 4.2,
         "meal_consistency": None,
         "exercise": None
     }
-    return render_template('goals.html', user_goal=user_goal.goal, goal_percent=user_goal.goal_percent or 0, goal_progress=fill_length, metrics=metrics)
+    return render_template('goals.html', user_goal=user_goal.goal, goal_percent=user_goal.goal_percent or 87, goal_progress=fill_length, metrics=metrics)
 
 @app.route('/set-goal', methods=['POST'])
 def setGoal():

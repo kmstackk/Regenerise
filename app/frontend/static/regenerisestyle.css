@@ -9,6 +9,7 @@
     --toggle-off: #909090;
     --goal-button: #0a183d;
     --lighter-box: #e5ebf4;
+    --help-grey: #424242;
     --radius-box: 18px;
     --radius-btn: 50px;
 }
@@ -201,20 +202,135 @@ body {
 
 
 
+/* GOALS PAGE */
+.goals-box {
+    margin: 1rem 1.3rem 2.2rem 1.3rem;   /* top/bottom, left/right */
+}
+
+/* Group of 'your goal', dropdown, question mark */
+.goal-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1.6rem;
+}
+
+/* Your goal: */
+.your-goal-label {
+    font-size: 2rem;
+}
+
+/* Question mark hover */
+.help-btn {
+    border-radius: 50%;
+    background: transparent;
+    opacity: 0.7;
+    border: 2px solid var(--help-grey);
+    color: var(--help-grey);
+}
+
+/* Dropdown options 'circadian', 'deep sleep' */
+.goal-dropdown {
+    background-color: var(--bg-dark);
+    color: var(--white-text);
+    font-size: 1.6rem;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    margin: 1rem;
+}
+
+.goal-dropdown:hover {
+    opacity: 0.85;
+}
+
+/* Stats and donut section */
+.goal-dashboard {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Left side with donut */
+.chart-wrapper {
+    width: 160px;
+    height: 160px;
+    /* flex-shrink: 0; */
+}
+
+.donut-svg {
+    width: 100%;
+    height: 100%;
+    animation: donut-fade 1s ease-in;
+}
+
+@keyframes donut-fade {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* Empty centre */
+.donut-hole {
+    fill: var(--bg-box);
+}
+
+/* Grey background ring/unfilled portion */
+.donut-ring {
+    fill: transparent;
+    stroke: #a0b0cc;
+    stroke-width: 4.5;
+}
+
+/* Progress section */
+.donut-segment {
+    fill: transparent;
+    stroke: var(--bg-dark);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    transform-origin: center;
+    animation: donut-grow 2.5s ease-out;
+}
+
+/* arc drawing from 0 to real value on page load */
+@keyframes donut-grow {
+    from { stroke-dasharray: 0 100; }
+    /* 'to' state is set inline on the element, so the animation ends at the real value */
+}
+
+/* Percent text in center */
+.donut-percent-text {
+    font-size: 1rem;
+    font-weight: 600;
+    animation: donutfade 1.5s ease-in;
+}
+
+/* Right side with text */
+.goal-metrics {
+    flex: 1;
+    min-width: 200px;
+}
+
+.metric-heading {
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin: 0.5rem;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+}
+
+.metric-missing {
+    font-style: italic;
+    color: var(--help-grey);
+}
+
+.metric-sub {
+    margin: 0 0 0 1rem;
+}
 
 
-/* ── iOS-STYLE TOGGLE SWITCH ──
-   This replaces the old ON/OFF badge spans with a real pill toggle.
-
-   How it works:
-   - The actual <input type="checkbox"> is hidden (opacity: 0, size 0)
-   - The visible toggle is the <span class="toggle-track"> which is
-     styled as a pill shape
-   - The <span class="toggle-thumb"> is the white circle that slides
-   - The ON/OFF labels inside the track show/hide based on checked state
-   - CSS :checked selector on the hidden input controls all the visual changes
-     via the adjacent sibling (~) selector
-*/
+/* TOGGLE ON/OFF SWITCH */
 .toggle-switch {
     position: relative;
     display: inline-flex;
@@ -240,7 +356,6 @@ body {
     height: 32px;
     border-radius: 50px;
     background-color: var(--toggle-off);   /* grey when OFF */
-    /* padding: 0 6px; */
     position: relative;
     transition: background-color 0.25s;
     cursor: pointer;
