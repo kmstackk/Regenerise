@@ -126,10 +126,10 @@ class Alarm(db.Model):
     # alarm primary key
     id = db.Column(db.Integer, primary_key=True)
     # columns
+    label = db.Column(db.String(30))
     alarm_time = db.Column(db.Time)
     enabled = db.Column(db.Boolean)
-    smart_wakeup_window = db.Column(db.Integer)
-    repeat_days = db.Column(db.String(50))
+    repeat_days = db.Column(db.String(7)) #MTWTFSS as 1234567 so 145 would be Mon Thurs Fri
     created_at = db.Column(db.DateTime)
 
     # foreign keys
