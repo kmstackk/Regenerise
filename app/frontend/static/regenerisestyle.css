@@ -406,3 +406,76 @@ body {
 /* When checked: show ON, hide OFF */
 .toggle-switch input:checked ~ .toggle-track .toggle-label-on  { opacity: 1; }
 .toggle-switch input:checked ~ .toggle-track .toggle-label-off { opacity: 0; }
+
+/* ===== FLIP CARDS (ADDED FEATURE) ===== */
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+/* Card wrapper */
+.flip-card {
+    background: transparent;
+    width: 260px;
+    height: 180px;
+    perspective: 1000px; /* THIS enables 3D */
+}
+
+/* Inner container */
+.flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+/* Flip on hover */
+.flip-card:hover .flip-inner {
+    transform: rotateY(180deg);
+}
+
+/* Front & back */
+.flip-front, .flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+    padding: 15px;
+}
+
+/* Front style */
+.flip-front {
+    background-color: var(--bg-box);
+    color: var(--black-text);
+}
+
+/* Back style */
+.flip-back {
+    background-color: var(--lighter-box);
+    color: var(--black-text);
+    transform: rotateY(180deg);
+}
+
+/* TEXT FIX (readable but fits) */
+.flip-front p {
+    font-size: 14px;
+    margin: 3px 0;
+    text-align: center;
+}
+
+.flip-back p {
+    font-size: 13px;
+    margin: 4px 0;
+    text-align: center;
+    line-height: 1.4;
+}
