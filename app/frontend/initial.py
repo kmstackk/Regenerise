@@ -18,8 +18,8 @@ from get_device_data import save_sensor_readings
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
 # points at the shared database file in the backend folder
-db_path = os.path.join(backend_path, 'database.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
+db_path = os.path.join(backend_path, 'instance', 'app.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'password'
 

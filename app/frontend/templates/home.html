@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-<!-- {% import "bootstrap/wtf.html" as wtf %} -->
 
 {% block title %}Main Page{% endblock %}
 
 {% block content %}
 
-<!-- Greeting 'Hello, name!' -->
+<!-- Greeting -->
 <div class="greeting-row">
     <h2 class="greeting-text">Good morning, {{ user_name }}!</h2>
 </div>
 
 <div class="main-boxes">
+
     <!-- BOX 1: Sleep stats -->
     <div class="row mb-3">
         <div class="col-12">
@@ -18,24 +18,59 @@
                 <h4 class="box-title">Your recent sleep stats:</h4>
                 
                 <div class="row text-center stat-row">
+
                     {% for item in data %}
                     <div class="col-4 stat-boxes">
-                        <img src="{{ url_for ('static', filename=item.icon)}}" alt="{{ item.category }}" class="stat-icon">
-                        {% if item.category == 'uninterrupted' %}
-                            <p class="stat-label">{{ item.userscore }} hours of uninterrupted sleep</p>
-                        {% elif item.category == 'restlessness' %}
-                            <p class="stat-label">{{ item.userscore }} mins total recorded restlessness</p>
-                        {% elif item.category == 'environment' %}
-                            {% if item.userscore == 1 %}
-                                <p class = "stat-label">environment score low</p> 
-                            {% elif item.userscore == 2 %}
-                                <p class = "stat-label">environment score medium</p> 
-                            {% elif item.userscore == 3 %}
-                                <p class = "stat-label">environment score high</p> 
-                            {% endif %}   
-                        {% endif %}
+
+                        <!-- ===== FLIP CARD START ===== -->
+                        <div class="flip-card">
+                            <div class="flip-inner">
+
+                                <!-- FRONT -->
+                                <div class="flip-front">
+                                    <img src="{{ url_for('static', filename=item.icon)}}" alt="{{ item.category }}" class="stat-icon">
+
+                                    {% if item.category == 'uninterrupted' %}
+                                        <p class="stat-label">{{ item.userscore }} hours of uninterrupted sleep</p>
+
+                                    {% elif item.category == 'restlessness' %}
+                                        <p class="stat-label">{{ item.userscore }} mins total recorded restlessness</p>
+
+                                    {% elif item.category == 'environment' %}
+                                        {% if item.userscore == 1 %}
+                                            <p class="stat-label">environment score low</p>
+                                        {% elif item.userscore == 2 %}
+                                            <p class="stat-label">environment score medium</p>
+                                        {% elif item.userscore == 3 %}
+                                            <p class="stat-label">environment score high</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+
+                                <!-- BACK -->
+                                <div class="flip-back">
+                                    {% if item.category == 'uninterrupted' %}
+                                        <p>Time spent asleep without waking or disturbances.</p>
+                                        <p>Allows the body to complete deep and REM sleep stages, improving overall sleep quality.</p>
+
+                                    {% elif item.category == 'restlessness' %}
+                                        <p>The amount of movement recorded during sleep.</p>
+                                        <p>Frequent movement may indicate discomfort or disrupted sleep cycles.</p>
+                                        <p>Less movement = better sleep.</p>
+
+                                    {% elif item.category == 'environment' %}
+                                        <p>The conditions of your sleep environment, such as light, noise, and temperature.</p>
+                                        <p>Poor conditions can disrupt sleep, while optimal settings improve sleep quality and duration.</p>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- ===== FLIP CARD END ===== -->
+
                     </div>
                     {% endfor %}
+
                 </div>
 
                 <p class="overall-score">Overall score: <strong>{{ user_overall_score | capitalize }}</strong></p>
@@ -43,25 +78,24 @@
         </div>
     </div>
 
-    <!-- BOX 2 (graph), 3 (alarms), 4 (goals) -->
+    <!-- BOX 2 + 3 + 4 -->
     <div class="row mb-3">
 
-        <!-- BOX 2: Graph (left left column in desktop, full width on phone) -->
+        <!-- BOX 2: Graph -->
         <div class="col-12 col-md-6 mb-3 mb-md-0">
             <div class="rg-box box-2 h-100 d-flex flex-column">
                 <h4 class="box-title">Recent Overview:</h4>
                 <div class="graph-container">
-                    <!-- Placeholder image which will be replaced with actual data -->
                     <img src="{{ url_for('static', filename='graphplaceholder.png') }}" alt="Graph" class="graph-img">
                 </div>
                 <a href="/sleep-overview" class="see-more">See more...</a>
             </div>
         </div>
 
-        <!-- BOX 3 + BOX 4 stacked (right column on desktop, full width on phone) -->
+        <!-- RIGHT SIDE -->
         <div class="col-12 col-md-6 d-flex flex-column gap-col">
 
-            <!-- BOX 3: Alarms (all is dummy data for now)-->
+            <!-- BOX 3: Alarms -->
             <div class="rg-box box-3">
                 <h4 class="box-title">Alarms</h4>
                 <ul class="alarm-list">
@@ -90,12 +124,12 @@
                         <span class="alarm-days">Thursday</span>
                     </li>
                 </ul>
-                <a href="/regenerise/alarms" class="edit-link">edit</a>
+                <a href="/alarms" class="edit-link">edit</a>
             </div>
 
             <!-- BOX 4: Sleep goals -->
             <div class="rg-box box-4">
-                <a href="/regenerise/sleep-goals">
+                <a href="/sleep-goals">
                     <button class="sleep-goal-btn">Set new sleep goal</button>
                 </a>
             </div>
