@@ -35,6 +35,11 @@ SLEEP_STAT_ICONS = [
     {"category": "environment", "icon": "audiolines.svg"},
 ]
 
+DAY_MAP = {'1': 'Monday', '2': 'Tuesday', '3': 'Wednesday', '4': 'Thursday', '5': 'Friday', '6': 'Saturday', '7': 'Sunday'}
+
+
+# HELPERS 
+
 # Returns the three sleep stats in box 1 on the home page
 def get_sleep_stats(device_id):
     session = (SleepSession.query.filter_by(device_id=device_id).order_by(SleepSession.start_time.desc()).first())
@@ -90,6 +95,31 @@ def get_or_create_user_goal(device_id):
         db.session.commit()
     return user_goal
 
+def get_alarms_for_display(device_id):
+    # Returns alarms for device ordered by time
+    return(Alarm.query
+           .filter_by(device_id=device_id)
+           .order_by(Alarm.alarm_time).all())
+
+@app.template_filter('format_days')
+def format_days(repeat_days):
+    if not repeat_days:
+        return 'Once'
+    else:
+        days = sorted(set(repeat_days)) # removes duplicates and sorts numerically
+    
+    if days == ['1', '2', '3', '4', '5']:
+        return 'Weekdays'
+    elif days == ['6', '7']:
+        return 'Weekends'
+    elif days == ['1', '2', '3', '4', '5', '6', '7']:
+        return 'Everyday'
+    else:
+        return ', '.join(DAY_MAP[x] for x in days if x in DAY_MAP)
+
+
+
+# ROUTES
 
 # user_name and user_overall_score are dummy values currently 
 @app.route('/')
@@ -99,7 +129,7 @@ def homePage():
 
     sleep_data = get_sleep_stats(DEVICE_ID)
     overall = get_overall_score(DEVICE_ID)
-    alarms = Alarm.query.filter_by(device_id=DEVICE_ID).all()
+    alarms = get_alarms_for_display(DEVICE_ID) 
     return render_template('home.html', data=sleep_data, user_name=name, user_overall_score=overall, alarms=alarms)
 
 
@@ -125,7 +155,11 @@ def overviewPage():
 
 @app.route('/regenerise/alarms')
 def alarmPage():
-    return render_template('alarms.html')
+    alarms = get_alarms_for_display(DEVICE_ID)
+    return render_template('alarms.html', alarms=alarms)
+
+
+# SLEEP GOALS
 
 @app.route('/regenerise/sleep-goals')
 def goalsPage():
@@ -165,3 +199,51 @@ if __name__ == '__main__':
         db.create_all()
         
     app.run(debug=True)
+
+
+# ALARMS
+
+@app.route('/regenerise/alarms/add', methods=['POST'])
+def addAlarm():
+    time_str = request.form.get('alarm_time') # e.g. "07:15" from <input type="time">
+    days = request.form.getlist('days')      # list of checked values e.g. ['1','5']
+    label = request.form.get('label', '').strip() or None
+
+    parsed_time = None 
+    if time_str:
+        try:
+            hour, min = time_str.split(':')
+            parsed_time = dt_time(int(hour), int(min)) 
+        except ValueError:
+            pass
+
+    # Sort and join day digits into db format
+    repeat_days = ''.join(sorted(set(days))) if days else None
+
+    new_alarm = Alarm(
+        device_id=DEVICE_ID,
+        alarm_time=parsed_time,
+        enabled=True,
+        repeat_days=repeat_days,
+        label=label,
+        created_at=datetime.now(timezone.utc),
+    )
+    db.session.add(new_alarm)
+    db.session.commit()
+
+    return redirect(url_for('alarmPage'))
+
+# Flips the enabled boolean and saves to db
+@app.route('/regenerise/alarms/toggle/<int:alarm_id>', methods=['POST'])
+def toggleAlarm(alarm_id):
+    alarm = Alarm.query.get_or_404(alarm_id)
+    alarm.enabled = not alarm.enabled
+    db.session.commit()
+    return redirect(url_for('alarmPage'))
+
+@app.route('/regenerise/alarms/delete/<int:alarm_id>', methods=['POST'])
+def deleteAlarm(alarm_id):
+    alarm = Alarm.query.get_or_404(alarm_id)
+    db.session.delete(alarm)
+    db.session.commit()
+    return redirect(url_for('alarmPage'))
