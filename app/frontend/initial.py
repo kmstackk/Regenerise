@@ -1,19 +1,22 @@
+
 import sys
 import os
 
 # route to the backend folder from initial.py from
 backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'backend'))
-sys.path.insert(0, backend_path)
+api_path = os.path.join(backend_path, 'api')
+sys.path.insert(0, api_path)
 
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
-from datetime import datetime, timezone
+from datetime import datetime, timezone, time as dt_time
 
 # telemtry
-from thingsboard_api import get_telemetry
+from thingsboard_api import get_latest_telemetry
 from get_device_data import save_sensor_readings
+print("Imports finished")
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -192,14 +195,6 @@ def setGoal():
 
     return redirect(url_for('goalsPage'))
 
-if __name__ == '__main__':
-    with app.app_context():
-        # Creates any missing tables without touching existing ones 
-        # So on first run UserGoal will be created here
-        db.create_all()
-        
-    app.run(debug=True)
-
 
 # ALARMS
 
@@ -247,3 +242,12 @@ def deleteAlarm(alarm_id):
     db.session.delete(alarm)
     db.session.commit()
     return redirect(url_for('alarmPage'))
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        # Creates any missing tables without touching existing ones 
+        # So on first run UserGoal will be created here
+        db.create_all()
+        
+    app.run(debug=True)

@@ -88,7 +88,7 @@
                 <div class="graph-container">
                     <img src="{{ url_for('static', filename='graphplaceholder.png') }}" alt="Graph" class="graph-img">
                 </div>
-                <a href="/sleep-overview" class="see-more">See more...</a>
+                <a href="/regenerise/sleep-overview" class="see-more">See more...</a>
             </div>
         </div>
 
@@ -99,37 +99,29 @@
             <div class="rg-box box-3">
                 <h4 class="box-title">Alarms</h4>
                 <ul class="alarm-list">
+                    {% for alarm in alarms %}
                     <li>
                         <label class="toggle-switch">
-                            <input type="checkbox" checked>
+                            <input type="checkbox" {% if alarm.enabled %}checked{% endif %} disabled>
                             <span class="toggle-track">
                                 <span class="toggle-label-on">ON</span>
                                 <span class="toggle-label-off">OFF</span>
                                 <span class="toggle-thumb"></span>
                             </span>
                         </label>
-                        <span class="alarm-time">7:15 AM</span>
-                        <span class="alarm-days">Monday - Friday</span>
+                        <span class="alarm-time">{{ alarm.alarm_time.strftime('%I:%M %p') if alarm.alarm_time else '--:--' }}</span>
+                        <span class="alarm-days">{{ alarm.repeat_days | format_days }}</span>
                     </li>
-                    <li>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-track">
-                                <span class="toggle-label-on">ON</span>
-                                <span class="toggle-label-off">OFF</span>
-                                <span class="toggle-thumb"></span>
-                            </span>
-                        </label>
-                        <span class="alarm-time">6:30 AM</span>
-                        <span class="alarm-days">Thursday</span>
-                    </li>
+                    {% else %}
+                    <li class="no-alarms-msg">No alarms set.</li>
+                    {% endfor %}
                 </ul>
-                <a href="/alarms" class="edit-link">edit</a>
+                <a href="/regenerise/alarms" class="edit-link">edit</a>
             </div>
 
             <!-- BOX 4: Sleep goals -->
             <div class="rg-box box-4">
-                <a href="/sleep-goals">
+                <a href="/regenerise/sleep-goals">
                     <button class="sleep-goal-btn">Set new sleep goal</button>
                 </a>
             </div>

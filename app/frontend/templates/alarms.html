@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 <!-- {% import "bootstrap/wtf.html" as wtf %} -->
 
-{% block title %}Main Page{% endblock %}
+{% block title %}Alarms{% endblock %}
 
 {% block content %}
 
@@ -12,36 +12,84 @@
 <div class="main-boxes">
 
     <div class="rg-box alarms-box">
-        <ul class="alarm-list">
-            <li>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="toggle-track">
-                        <span class="toggle-label-on">ON</span>
-                        <span class="toggle-label-off">OFF</span>
-                        <span class="toggle-thumb"></span>
-                    </span>
-                </label>
-                <span class="alarm-time">7:15 AM</span>
-                <span class="alarm-days">Monday - Friday</span>
+       
+
+        <!-- Existing alarms -->
+        {% if alarms %}
+        <ul class="alarm-list alarms-full-list">
+            {% for alarm in alarms %}
+            <li class="alarm-row">
+
+                <!-- ON/OFF toggle updating -->
+                <form method="POST" action="/regenerise/alarms/toggle/{{ alarm.id }}">
+                    <label class="toggle-switch">
+                        <input type="checkbox" {% if alarm.enabled %}checked{% endif %} onchange="this.form.submit()">
+                        <span class="toggle-track">
+                            <span class="toggle-label-on">ON</span>
+                            <span class="toggle-label-off">OFF</span>
+                            <span class="toggle-thumb"></span>
+                        </span>
+                    </label>
+                </form>
+
+                <!-- Time and days -->
+                <span class="alarm-time">
+                    {{ alarm.alarm_time.strftime('%I:%M %p') if alarm.alarm_time else '--:--' }}
+                </span>
+                <span class="alarm-days">{{ alarm.repeat_days | format_days }}</span>
+                {% if alarm.label %}
+                    <span class="alarm-label-tag">{{ alarm.label }}</span>
+                {% endif %}
+
+                <!-- Delete button -->
+                <form method="POST" action="/regenerise/alarms/delete/{{ alarm.id }}" class="alarm-delete-form">
+                    <button type="submit" class="alarm-delete-btn" title="Delete alarm">X</button>
+                </form>
+                
             </li>
-            <li>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="toggle-track">
-                        <span class="toggle-label-on">ON</span>
-                        <span class="toggle-label-off">OFF</span>
-                        <span class="toggle-thumb"></span>
-                    </span>
-                </label>
-                <span class="alarm-time">6:30 AM</span>
-                <span class="alarm-days">Thursday</span>
-            </li>
+            {% endfor %}
         </ul>
 
+        {% else %}
+            <p class="no-alarms-msg">No alarms set yet.</p>
+        {% endif %}
+
+
+        <!-- Add new alarm -->
+         <div class="add-alarm-section">
+            <h4 class="box-title">Add new alarm</h4>
+
+            <form method="POST" action="/regenerise/alarms/add" class="add-alarm-form">
+                <!-- Time picker -->
+                <div class="alarm-form-row">
+                    <label class="alarm-form-label">Time</label>
+                    <input type="time" name="alarm_time" class="alarm-input alarm-time-input" required> 
+                </div>
+
+                <!-- Day checkboxes -->
+                <div class="alarm-form-row">
+                    <label class="alarm-form-label">Days</label>
+                    <div class="day-checkboxes">
+                        {% for num, day in [('1','M'), ('2','T'), ('3','W'), ('4','T'), ('5','F'), ('6','S'), ('7','S')] %}
+                        <label class="day-label">
+                            <input type="checkbox" name="days" value="{{ num }}">
+                            <span class="day-bubble">{{ day }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Name label -->
+                <div class="alarm-form-row">
+                    <label class="alarm-form-label">Label <span class="optional-tag">(optional)</span></label>
+                    <input type="text" name="label" class="alarm-input alarm-label-input" placeholder="e.g. Work, Gym" maxlength="30">
+                </div>
+
+                <button type="submit" class="alarm-add-btn">Add alarm</button>
+            
+            </form>
+         </div>  
     </div>
-
 </div>
-
 
 {% endblock %}
