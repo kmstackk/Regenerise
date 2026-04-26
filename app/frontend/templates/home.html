@@ -81,14 +81,68 @@
     <!-- BOX 2 + 3 + 4 -->
     <div class="row mb-3">
 
-        <!-- BOX 2: Graph -->
+        <!-- BOX 2: Weekly Sleep Performance -->
         <div class="col-12 col-md-6 mb-3 mb-md-0">
             <div class="rg-box box-2 h-100 d-flex flex-column">
-                <h4 class="box-title">Recent Overview:</h4>
-                <div class="graph-container">
-                    <img src="{{ url_for('static', filename='graphplaceholder.png') }}" alt="Graph" class="graph-img">
+                <h4 class="box-title">Weekly Sleep Performance:</h4>
+
+                <div class="sleep-performance-chart">
+
+                    <div class="chart-header">
+                        <span>Day</span>
+                        <span>Sleep Quality</span>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Monday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill excellent" style="width: 92%;">Excellent • 92%</div>
+                        </div>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Tuesday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill good" style="width: 78%;">Good • 78%</div>
+                        </div>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Wednesday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill excellent" style="width: 95%;">Excellent • 95%</div>
+                        </div>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Thursday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill fair" style="width: 61%;">Fair • 61%</div>
+                        </div>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Friday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill excellent" style="width: 89%;">Excellent • 89%</div>
+                        </div>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Saturday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill good" style="width: 84%;">Good • 84%</div>
+                        </div>
+                    </div>
+
+                    <div class="day-row">
+                        <span class="day-label">Sunday</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill excellent" style="width: 90%;">Excellent • 90%</div>
+                        </div>
+                    </div>
+
                 </div>
-                <a href="/regenerise/sleep-overview" class="see-more">See more...</a>
             </div>
         </div>
 
