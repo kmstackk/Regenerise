@@ -7,7 +7,7 @@ DEVICE_ID = "c6f095a0-2df1-11f1-81d7-dd37020598c0"
 
 def get_headers():
     # always get fresh token before making requests
-    
+
     token = get_valid_token()
     return {
         "X-Authorization": f"Bearer {token}",
@@ -46,7 +46,7 @@ def push_alarms(alarms: list) -> bool:
         return False
  
  
-def add_alarm(time: str) -> bool:
+def add_alarm(label: str, time: str, enabled: bool=True) -> bool:
     # adds a new alarm to the alarms list, ignores duplicates
 
     alarms = get_alarms()
@@ -55,7 +55,7 @@ def add_alarm(time: str) -> bool:
         print(f"Alarm '{time}' already exists.")
         return False
  
-    alarms.append(time)
+    alarms.append([label, time, enabled])
     alarms.sort()  # keep them in chronological order
  
     success = push_alarms(alarms)
