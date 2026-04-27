@@ -46,7 +46,7 @@ def push_alarms(alarms: list) -> bool:
         return False
  
  
-def add_alarm(label: str, time: str, enabled: bool=True) -> bool:
+def add_alarm(time: str, enabled: bool=True) -> bool:
     # adds a new alarm to the alarms list, ignores duplicates
 
     alarms = get_alarms()
@@ -55,7 +55,7 @@ def add_alarm(label: str, time: str, enabled: bool=True) -> bool:
         print(f"Alarm '{time}' already exists.")
         return False
  
-    alarms.append([label, time, enabled])
+    alarms.append([time, enabled])
     alarms.sort()  # keep them in chronological order
  
     success = push_alarms(alarms)
