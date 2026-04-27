@@ -1,4 +1,3 @@
-
 import sys
 import os
 
@@ -12,6 +11,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, UserGoal
 from datetime import datetime, timezone, time as dt_time
+from send_data import add_alarm
 
 # telemtry
 from thingsboard_api import get_latest_telemetry
@@ -230,6 +230,7 @@ def addAlarm():
     )
     db.session.add(new_alarm)
     db.session.commit()
+    add_alarm(time_str)
 
     return redirect(url_for('alarmPage'))
 
