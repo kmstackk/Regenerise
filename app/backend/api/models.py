@@ -4,6 +4,7 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+
 # ================= DEVICE TABLE =================
 class Device(db.Model):
     __tablename__ = "devices"
@@ -21,7 +22,9 @@ class Device(db.Model):
 
     location = db.relationship("Location", back_populates="devices")
     firmware_version = db.relationship("FirmwareVersion", back_populates="devices")
-    device_configurations = db.relationship("DeviceConfiguration", back_populates="device")
+    device_configurations = db.relationship(
+        "DeviceConfiguration", back_populates="device"
+    )
     sensors = db.relationship("Sensor", back_populates="device")
     device_status_logs = db.relationship("DeviceStatusLog", back_populates="device")
     alarms = db.relationship("Alarm", back_populates="device")
@@ -29,6 +32,7 @@ class Device(db.Model):
     sleep_sessions = db.relationship("SleepSession", back_populates="device")
     sensor_data = db.relationship("SensorData", back_populates="device")
     user_goal = db.relationship("UserGoal", back_populates="device", uselist=False)
+
 
 # ================= SENSOR TABLE =================
 class Sensor(db.Model):
@@ -45,6 +49,7 @@ class Sensor(db.Model):
     device = db.relationship("Device", back_populates="sensors")
     sensor_type = db.relationship("SensorType", back_populates="sensors")
 
+
 # ================= SENSOR TYPE TABLE =================
 class SensorType(db.Model):
     __tablename__ = "sensor_types"
@@ -58,6 +63,7 @@ class SensorType(db.Model):
     measurement_unit = db.relationship("MeasurementUnit", back_populates="sensor_types")
     sensors = db.relationship("Sensor", back_populates="sensor_type")
 
+
 # ================= MEASUREMENT UNIT TABLE =================
 class MeasurementUnit(db.Model):
     __tablename__ = "measurement_units"
@@ -67,6 +73,7 @@ class MeasurementUnit(db.Model):
     symbol = db.Column(db.String(10))
 
     sensor_types = db.relationship("SensorType", back_populates="measurement_unit")
+
 
 # ================= DEVICE CONFIGURATION TABLE =================
 class DeviceConfiguration(db.Model):
@@ -81,6 +88,7 @@ class DeviceConfiguration(db.Model):
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
     device = db.relationship("Device", back_populates="device_configurations")
+
 
 # ================= DEVICE STATUS LOG TABLE =================
 class DeviceStatusLog(db.Model):
@@ -97,6 +105,7 @@ class DeviceStatusLog(db.Model):
 
     device = db.relationship("Device", back_populates="device_status_logs")
 
+
 # ================= ALARM TABLE =================
 class Alarm(db.Model):
     __tablename__ = "alarms"
@@ -105,6 +114,10 @@ class Alarm(db.Model):
     label = db.Column(db.String(30))
     alarm_time = db.Column(db.Time)
     enabled = db.Column(db.Boolean)
+    # Re-added: was dropped in migration 5c2c248b5c58 but needed by the
+    # alarm algorithm for smart wake-up window (minutes before alarm_time).
+    # A new migration adds this column back — see migrations/versions/
+    smart_wakeup_window = db.Column(db.Integer, default=20)
     repeat_days = db.Column(db.String(7))
     created_at = db.Column(db.DateTime)
 
@@ -112,6 +125,7 @@ class Alarm(db.Model):
 
     device = db.relationship("Device", back_populates="alarms")
     alarm_events = db.relationship("AlarmEvent", back_populates="alarm")
+
 
 # ================= ALARM EVENT TABLE =================
 class AlarmEvent(db.Model):
@@ -127,6 +141,7 @@ class AlarmEvent(db.Model):
 
     alarm = db.relationship("Alarm", back_populates="alarm_events")
     device = db.relationship("Device", back_populates="alarm_events")
+
 
 # ================= SLEEP SESSION TABLE =================
 class SleepSession(db.Model):
@@ -144,6 +159,7 @@ class SleepSession(db.Model):
     device = db.relationship("Device", back_populates="sleep_sessions")
     sleep_scores = db.relationship("SleepScore", back_populates="sleep_session")
 
+
 # ================= SLEEP SCORE TABLE =================
 class SleepScore(db.Model):
     __tablename__ = "sleep_scores"
@@ -156,7 +172,10 @@ class SleepScore(db.Model):
     sleep_session_id = db.Column(db.Integer, db.ForeignKey("sleep_sessions.id"))
 
     sleep_session = db.relationship("SleepSession", back_populates="sleep_scores")
-    sleep_metric_scores = db.relationship("SleepMetricScore", back_populates="sleep_score")
+    sleep_metric_scores = db.relationship(
+        "SleepMetricScore", back_populates="sleep_score"
+    )
+
 
 # ================= SLEEP METRIC TYPE TABLE =================
 class SleepMetricType(db.Model):
@@ -166,7 +185,10 @@ class SleepMetricType(db.Model):
     name = db.Column(db.String(100))
     description = db.Column(db.String(255))
 
-    sleep_metric_scores = db.relationship("SleepMetricScore", back_populates="metric_type")
+    sleep_metric_scores = db.relationship(
+        "SleepMetricScore", back_populates="metric_type"
+    )
+
 
 # ================= SLEEP METRIC SCORE TABLE =================
 class SleepMetricScore(db.Model):
@@ -180,7 +202,10 @@ class SleepMetricScore(db.Model):
     metric_type_id = db.Column(db.Integer, db.ForeignKey("sleep_metric_types.id"))
 
     sleep_score = db.relationship("SleepScore", back_populates="sleep_metric_scores")
-    metric_type = db.relationship("SleepMetricType", back_populates="sleep_metric_scores")
+    metric_type = db.relationship(
+        "SleepMetricType", back_populates="sleep_metric_scores"
+    )
+
 
 # ================= FIRMWARE VERSION TABLE =================
 class FirmwareVersion(db.Model):
@@ -194,6 +219,7 @@ class FirmwareVersion(db.Model):
 
     devices = db.relationship("Device", back_populates="firmware_version")
 
+
 # ================= LOCATION TABLE =================
 class Location(db.Model):
     __tablename__ = "locations"
@@ -206,12 +232,13 @@ class Location(db.Model):
 
     devices = db.relationship("Device", back_populates="location")
 
+
 # ================= SENSOR DATA TABLE =================
 class SensorData(db.Model):
     __tablename__ = "sensor_data"
 
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.BigInteger)
+    timestamp = db.Column(db.BigInteger)  # epoch ms from ThingsBoard
     temperature = db.Column(db.Float)
     humidity = db.Column(db.Float)
     light = db.Column(db.Integer)
@@ -222,6 +249,7 @@ class SensorData(db.Model):
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
 
     device = db.relationship("Device", back_populates="sensor_data")
+
 
 # ================= USER GOAL TABLE =================
 class UserGoal(db.Model):
@@ -235,6 +263,7 @@ class UserGoal(db.Model):
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"), unique=True)
 
     device = db.relationship("Device", back_populates="user_goal")
+
 
 # ================= FLASK APP SETUP =================
 app = Flask(__name__)

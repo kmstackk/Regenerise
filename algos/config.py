@@ -81,12 +81,13 @@ CONSISTENCY: dict = {
 
 # Alarm setting defaults
 ALARM_DEFAULTS: dict = {
-    "snooze_duration_min": 9,
+    "snooze_duration_minutes": 9,
     "max_snoozes": 3,
     "snooze_escalation": True,  # alarm louder per snooze
     "smart_alarm_window": 20,  # Wake within 20 min of alarm if light sleep
     "wake_up_check": True,  # Check/confirm if user awake, if not done alarm goes off again
     "days_of_week": [],  # Empty = one-off. [0..6] = Mon..Sun
+    "vibration_pattern": [500, 200, 500, 200, 1000],  # ms on/off pattern
 }
 
 
