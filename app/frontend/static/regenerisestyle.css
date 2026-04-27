@@ -215,6 +215,24 @@ body {
     color: var(--bg-box);
 }
 
+.info-section {
+    color: var(--white-text);
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.info-title {
+    font-weight: bold;
+}
+
+.data-list {
+    list-style-type: none;
+}
+
+.info-subheading {
+    font-size: 1.8rem;
+}
+
 
 
 /* GOALS PAGE */

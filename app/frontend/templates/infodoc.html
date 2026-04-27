@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+<!-- {% import "bootstrap/wtf.html" as wtf %} -->
+
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+
+<div class="info-section">
+
+    <h3 class="info-title">Who we are</h3>
+    <p><i>Regenerise</i> is a sleep focused website created to help users better understand and improve their sleep habits through a simple, accessible and visually engaging platform. Developed as a collaborative project the website combines health awareness with modern web design to provide users with practical tools for tracking and managing sleep related activities.</p>
+
+    <h3 class="info-title">What we do</h3>
+    <p>By drawing on specific health data, <i>Regenerise</i> offers personalised insights and guidance to support healthy sleep routines. We allow users to view and manage key information in one place, providing features such as sleep statistics, weekly sleep performance overviews, alarm management and sleep goal setting. Through the integration of an intelligent alarm clock, users can set and adjust wake‑up times while receiving feedback on how these choices align with their sleep patterns and overall sleep health. Our aim is to make sleep data easier to understand while encouraging healthier routines through clear insights and user friendly design.</p>
+
+    <h3 class="info-title">What data we collect</h3>
+    <p>To provide personalised sleep insights and support full functionality, the website collects and stores:</p>
+    <p><b class="info-subheading">Sleep Statistics data</b>
+        <ul class="data-list">
+            <li>• Total sleep duration (e.g. 6.5 to 8 hours per night) •</li>
+            <li>• Uninterrupted sleep duration (measured in hours) •</li>
+            <li>• Restlessness levels, recorded as movement or disturbances during sleep (e.g. 15–40 minutes of movement per night) •</li>
+            <li>• Environmental sleep conditions, including external factors including light exposure, noise levels, temperature, and humidity •</li>
+        </ul>
+    </p>
+    <p><b class="info-subheading">Alarm and Scheduling Data</b>
+        <ul class="data-list">
+            <li>• Alarm times (for example, 7:15 AM or 6:30 AM) •</li>
+            <li>• Repeat schedules (such as weekdays, weekends, or specific selected days) •</li>
+            <li>• Alarm activation preferences (enabled or disabled settings) •</li>
+        </ul>
+    </p>
+    <p>This data is collected to support key website functions including sleep monitoring, dashboard visualisation, alarm management, and goal tracking. For example, a user sleeping 7.8 hours with 18 minutes of restlessness and a high environmental score may receive a stronger weekly sleep performance rating than a user with shorter sleep duration and higher disturbance levels. By collecting and organising these detailed data points, <i>Regenerise</i> can generate clearer summaries, more personalised sleep insights, and a more tailored user experience while maintaining structured and responsible data handling practices.</p>
+
+    <h3 class="info-title">How we process your data</h3>
+    <p><i>Regenerise</i> processes user data through a structured backend and database system designed to transform raw sleep, related inputs into meaningful, personalised insights. When a user interacts with the platform information such as account credentials, sleep duration, restlessness levels, environmental sleep conditions, alarm schedules, and sleep goals is collected and stored securely within the website’s database. Each category of data is organised into relevant tables and linked to the individual user profile, allowing the system to maintain personalised records over time.</p>
+    <p>Once stored, the backend system retrieves this information and applies processing logic to interpret and categorise the data. For example, sleep duration data may be evaluated to determine uninterrupted sleep quality, restlessness data may be analysed to identify movement patterns or disturbances during sleep, and environmental inputs such as light, temperature, or noise factors may be used to generate an environmental score. Alarm preferences and sleep goals are also processed to support personalised scheduling and progress tracking features.</p>
+    <p>After analysis, the system converts these processed values into user friendly outputs displayed on the frontend dashboard. This includes generating sleep statistic summaries, calculating overall sleep performance, presenting weekly sleep trends, updating alarms and tracking progress toward sleep goals. By combining backend logic with frontend visualisation, <i>Regenerise</i> transforms complex sleep related data into clear, accessible feedback that users can easily understand and use to improve their sleep habits. This processing approach ensures both functionality and personalisation while supporting a seamless user experience across the platform.</p>
+
+</div>
+
+
+
+{% endblock %}
