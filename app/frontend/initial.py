@@ -161,6 +161,11 @@ def alarmPage():
     alarms = get_alarms_for_display(DEVICE_ID)
     return render_template('alarms.html', alarms=alarms)
 
+@app.route('/regenerise/info')
+def infodoc():
+    alarms = get_alarms_for_display(DEVICE_ID)
+    return render_template('infodoc.html')
+
 
 # SLEEP GOALS
 

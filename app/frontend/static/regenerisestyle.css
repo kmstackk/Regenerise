@@ -46,6 +46,8 @@ body {
 
 .greeting-row {
     padding: 2rem 2.7rem 1.2rem 2.7rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 .greeting-text {
@@ -53,6 +55,24 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
+}
+
+.infodoc-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--white-text);
+    border-radius: 50%;
+    width: 3rem;
+    background: transparent;
+    border: 2px solid var(--white-text);
+}
+
+.infodoc-link:hover {
+    opacity: 50%;
+    color: #5b8def; 
+    font-weight: bold;
 }
 
 /* Main 4 boxes */
@@ -127,11 +147,6 @@ body {
 .see-more:hover {
     text-decoration: underline;
 }
-
-/* gap between stacked boxes 3 & 4 */
-/* .gap-col {
-    gap: 0.75rem;
-} */
 
 /* BOX 3: alarm toggles */
 .box-3 {
@@ -248,14 +263,15 @@ body {
 .goal-dashboard {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
+    text-align: center;
 }
 
 /* Left side with donut */
 .chart-wrapper {
     width: 160px;
     height: 160px;
-    /* flex-shrink: 0; */
 }
 
 .donut-svg {
@@ -306,7 +322,7 @@ body {
 
 /* Right side with text */
 .goal-metrics {
-    flex: 1;
+    flex: 0 1 auto;
     min-width: 200px;
 }
 
@@ -327,6 +343,105 @@ body {
 
 .metric-sub {
     margin: 0 0 0 1rem;
+}
+
+/* ALARMS */
+.alarms-box {
+    margin: 1rem;
+}
+
+.alarms-full-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0.5rem 2rem 0;
+}
+
+.alarm-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
+    flex-wrap: wrap;
+}
+
+.alarm-row:last-child {
+    border-bottom: none;
+}
+
+.alarm-label-tag {
+    font-size: 1rem;
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+    color: var(--bg-dark);
+}
+
+.alarm-delete-form {
+    margin-left: auto;
+}
+
+.alarm-delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--bg-dark);
+    font-size: 2rem;
+    opacity: 0.45;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: opacity 0.15s;
+}
+
+.alarm-delete-btn:hover {
+    opacity: 1;
+}
+
+.no-alarms-msg {
+    font-style: italic;
+    color: var(--help-grey);
+    padding: 0.5rem 0;
+}
+
+/* Add alarm form */
+.add-alarm-section {
+    border-top: 2px solid rgba(13, 27, 62, 0.15);
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+}
+ 
+.add-alarm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+ 
+/* Each label + input pair sit on one line */
+.alarm-form-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+ 
+.alarm-form-label {
+    font-weight: 600;
+    font-size: 1.7rem;
+    min-width: 60px;
+    margin: 0;
+}
+ 
+.optional-tag {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--help-grey);
+}
+ 
+.alarm-add-btn {
+    background-color: var(--bg-dark);
+    color: var(--white-text);
+    font-size: 1.7rem;
+    border-radius: var(--radius-btn);
+    margin: 0.7rem;
+    padding: 0.2rem;
 }
 
 
