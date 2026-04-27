@@ -230,7 +230,7 @@ def addAlarm():
     )
     db.session.add(new_alarm)
     db.session.commit()
-    add_alarm(time_str)
+    add_alarm(label, time_str, True)
 
     return redirect(url_for('alarmPage'))
 
