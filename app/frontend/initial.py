@@ -13,7 +13,6 @@ from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, User
 from datetime import datetime, timezone, time as dt_time
 from send_data import add_alarm
 
-
 # telemtry
 from thingsboard_api import get_latest_telemetry
 from get_device_data import save_sensor_readings
@@ -54,7 +53,7 @@ DAY_MAP = {'1': 'Monday', '2': 'Tuesday', '3': 'Wednesday', '4': 'Thursday', '5'
 # Returns the three sleep stats in box 1 on the home page
 def get_sleep_stats(device_id):
     # failsafe values
-    hours, restlessness, env_score = 7.5, 19, 2
+    hours, restlessness, env_score = 8, 20, 3
 
     session = (SleepSession.query.filter_by(device_id=device_id).order_by(SleepSession.start_time.desc()).first())
 
@@ -119,7 +118,7 @@ def get_overall_score(device_id):
             return "poor"
     
     # failsafe
-    return "good"
+    return "excellent"
 
 
 def get_sleep_consistency(device_id, nights=7):
@@ -251,7 +250,6 @@ def goalsPage():
         wake_time = "8:15 am"
         sleep_time = "10:30 pm"
 
-    # currently hardcoded, replace with real DB queries when we get to that
     metrics = {
         "schedule_rating": schedule_rating, 
         "wake_time": wake_time,

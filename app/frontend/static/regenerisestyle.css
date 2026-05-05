@@ -278,6 +278,7 @@ body {
 }
 
 /* Stats and donut section */
+/* https://codepen.io/janverstr/pen/PvPoaV */
 .goal-dashboard {
     display: flex;
     align-items: center;
@@ -464,6 +465,7 @@ body {
 
 
 /* TOGGLE ON/OFF SWITCH */
+/* Code taken from: https://codepen.io/Pinjasaur/pen/KqNqLa */
 .toggle-switch {
     position: relative;
     display: inline-flex;
