@@ -13,6 +13,7 @@ from models import db, Device, Alarm, SleepSession, SleepScore, SensorData, User
 from datetime import datetime, timezone, time as dt_time
 from send_data import add_alarm
 
+
 # telemtry
 from thingsboard_api import get_latest_telemetry
 from get_device_data import save_sensor_readings
@@ -28,6 +29,13 @@ app.config['SECRET_KEY'] = 'password'
 
 db.init_app(app)
 bootstrap = Bootstrap(app)
+
+# getting algorithm functions needed
+algos_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'algos'))
+sys.path.insert(0, algos_path)
+from sleep_scoring import score_sleep_efficiency, score_environmental, consistency_score
+from sleep_detection import detect_sleep_states, extract_sleep_periods
+
 
 # FOR NOW just having all queries to this device id, but when/if login functionality added then replace with device id
 DEVICE_ID = 1
@@ -45,23 +53,49 @@ DAY_MAP = {'1': 'Monday', '2': 'Tuesday', '3': 'Wednesday', '4': 'Thursday', '5'
 
 # Returns the three sleep stats in box 1 on the home page
 def get_sleep_stats(device_id):
+    # failsafe values
+    hours, restlessness, env_score = 7.5, 19, 2
+
     session = (SleepSession.query.filter_by(device_id=device_id).order_by(SleepSession.start_time.desc()).first())
 
     if session:
-        if session.total_sleep_minutes:
-            hours = round(session.total_sleep_minutes / 60, 1)
-        else:
-            hours = 0
+        try:
+            hours = round(session.total_sleep_minutes / 60, 1) if session.total_sleep_minutes else 0
+            
+            # Get SensorData for session 
+            rows = SensorData.query.filter(
+                SensorData.device_id == device_id, 
+                SensorData.timestamp >= session.start_time.timestamp() * 1000,
+                SensorData.timestamp <= session.end_time.timestamp() * 1000
+            ).order_by(SensorData.timestamp).all()
+            
+            # Convert to a dataframe as algorithm structure
+            df = pd.DataFrame([{
+                "timestamp": r.timestamp,
+                "temperature": r.temperature,
+                "humidity": r.humidity,
+                "light": r.light,
+                "sound": r.sound,
+                "distance": r.distance,
+                "motion": r.motion,
+            } for r in rows])
 
-        # idk what is going on with restlessness (minutes) so for now I'm picking whatever number I like 
-        restlessness = 20
-    
-        # im also not really sure how we are calculating enviroment score so that is also dummy values for now
-        env_score = 3
+            # Convert timestamp to datetime
+            df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
+            df = df.set_index("timestamp")
 
-    # failsafe for now
-    else:
-        hours, restlessness, env_score = 8, 20, 3
+            # Run sleep detection and extract periods
+            df = detect_sleep_states(df)
+            periods = extract_sleep_periods(df)
+
+            # Score
+            restlessness = score_sleep_efficiency(periods)
+            env_score, env_band = score_environmental(df, periods)
+
+        # failsafe
+        except Exception as e:
+            print("Sleep scoring failed: ", e)
+        
     
     scores = [hours, restlessness, env_score]
     for x, icon_row in enumerate(SLEEP_STAT_ICONS):
@@ -84,8 +118,36 @@ def get_overall_score(device_id):
         else:
             return "poor"
     
-    # default while database empty
-    return "excellent"
+    # failsafe
+    return "good"
+
+
+def get_sleep_consistency(device_id, nights=7):
+    # Get last N sleep sessions
+    sessions = (SleepSession.query.filter_by(device_id=device_id).order_by(SleepSession.start_time.desc()).limit(nights).all())
+
+    if not sessions or len(sessions) < 2:
+        return 0.5  # fallback
+
+    nightly_onsets = [s.start_time for s in sessions]
+    nightly_wakes = [s.end_time for s in sessions]
+
+    try:
+        return consistency_score(nightly_onsets, nightly_wakes)
+    except Exception as e:
+        print("Consistency score failed:", e)
+        return 0.5
+
+
+def get_consistency_label(score):
+    if score >= 0.75:
+        return "Excellent"
+    elif score >= 0.55:
+        return "Good"
+    elif score >= 0.35:
+        return "Fair"
+    else:
+        return "Poor"
 
 
 def get_or_create_user_goal(device_id):
@@ -124,7 +186,6 @@ def format_days(repeat_days):
 
 # ROUTES
 
-# user_name and user_overall_score are dummy values currently 
 @app.route('/')
 def homePage():
     device = Device.query.get(DEVICE_ID)
@@ -176,12 +237,28 @@ def goalsPage():
     # Converting goal_percent to SVG fill length, circle radius in SVG is 38 so d = 2 * 3.14 * 38 = 239
     fill_length = int((user_goal.goal_percent or 0) / 100 * 239)
 
+    session = (SleepSession.query.filter_by(device_id=DEVICE_ID).order_by(SleepSession.start_time.desc()).first())
+
+    try:
+        score = get_sleep_consistency(DEVICE_ID)
+        schedule_rating = get_consistency_label(score)  # db sleep consistency score
+
+        wake_time = session.start_time
+        sleep_time = session.end_time
+
+    except Exception as e:
+        schedule_rating = "Good"
+        wake_time = "8:15 am"
+        sleep_time = "10:30 pm"
+
     # currently hardcoded, replace with real DB queries when we get to that
     metrics = {
-        "schedule_rating": "Good", # db sleep consistency score
-        "wake_time": "8:15 am", # db SleepSession.end_time
-        "sleep_time": "10:30 pm", # db SleepSession.start_time
-        "light_hours": 4.2,
+        "schedule_rating": schedule_rating, 
+        "wake_time": wake_time,
+        "sleep_time": sleep_time,
+        
+        # These are placeholders for now
+        "light_hours": 4.2, 
         "meal_consistency": None,
         "exercise": None
     }

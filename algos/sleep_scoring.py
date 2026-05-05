@@ -279,7 +279,7 @@ def consistency_score(nightly_onsets: list, nightly_wakes: list) -> float:
 # Full nightly report
 def nightly_report(df: pd.DataFrame) -> dict:
     # Master function: takes a clean & state-labelled dataframe, returns all required metrics
-    from sleep_detection import detect_sleep_states()
+    from sleep_detection import detect_sleep_states
 
     if "is_sleep" not in df.columns:
         df = detect_sleep_states(df)
