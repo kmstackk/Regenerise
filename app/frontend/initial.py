@@ -333,4 +333,4 @@ if __name__ == '__main__':
         # So on first run UserGoal will be created here
         db.create_all()
         
-    app.run(debug=True)
+    app.run(port=5001, debug=False)
