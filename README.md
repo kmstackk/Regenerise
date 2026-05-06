@@ -7,3 +7,6 @@ WE NEED: frontend (Amelia), algorithms (abdul), device code (Calum), ORM code (k
 FRONTEND:
 To run the website, navigate to app -> frontend -> initial.py. Run python initial.py in a virtual environment.
 The frontend structure is setup with a static folder for all images/icons and the styling page, and a templates folder stores all the html files. Initial.py is what runs the website. Virtual environment with flask needed. 
+
+API:
+The device periodically pushes data to the cloud (thingsboard). The system then generates a token and makes a request (thingsboard REST API) using keys to request specific sensor data (i.e. keys=["motion","distance"] requests readings from the motion and distance sensors).
