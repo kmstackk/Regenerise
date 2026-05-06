@@ -19,3 +19,7 @@ Inside the folders backend/api, the python code to push and pull data to and fro
 
 <h2>ORM</h2>
 The database for Regenerise is generated using ORM (object relational mapping), using Flask with Flask-SQLAlchemy and SQLite backend. After the models.py file is created accordingly to the ERD, you simply have to install the required dependencies using 'pip install Flask Flask-SQLAlchemy'. You then write a short one line script that calls db.create_all(), and run the file.
+
+<h2>ALGORITHMS</h2>
+The hardware layer reads sensor readings written into the database via the thingsboard API. Data is validated and cleaned via processing.py and sleep samples are split into SLEEP/AWAKE/UNCERTAIN in detection.py. Using weighted voting across sensors sleep is scored in scoring.py and data is written back into the database. Alarm manager in algos/alarm.py loads alarm times from database and fires alarm buzzer via GPIO allowing snnooze, dismiss and smart wake up. All thresholds and weights are in config.py and can be changed without editing other code. Used pandas and numpy libraries to facilitate this code 
+

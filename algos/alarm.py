@@ -1,19 +1,3 @@
-"""
-alarm.py — Smart alarm manager.
-Supports single alarms, repeating days, snooze with smart escalation,
-and smart wake-up (light sleep detection window).
-
-GPIO / buzzer calls are wrapped in safe stubs — replace with real
-RPi.GPIO or Arduino serial commands in hardware/main.py.
-
-Changes from original:
-  - Fixed bug in target_time(): for/break loop was broken (missing break indent)
-  - Fixed key mismatch: snooze_duration_min → snooze_duration_minutes (matches config.py)
-  - AlarmManager now accepts device_id and can load alarms from the Flask DB
-  - Fired / snoozed / dismissed events are written to alarm_events table
-  - Hourly DB reload picks up new/deleted alarms without restarting the Pi
-"""
-
 import time
 import threading
 from datetime import datetime, timedelta
