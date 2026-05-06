@@ -10,3 +10,6 @@ The frontend structure is setup with a static folder for all images/icons and th
 
 <h2>API</h2>
 The device periodically pushes data to the cloud (thingsboard). The system then generates a token and makes a request (thingsboard REST API) using keys to request specific sensor data (i.e. keys=["motion","distance"] requests readings from the motion and distance sensors).
+
+<h2>DEVICE</h2>
+The folder holds the python files used by NodeRed to interact with the button, buzzer, and lcd screen. The files are run through node red when the flow is deployed using the inject nodes.
