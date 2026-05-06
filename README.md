@@ -13,3 +13,6 @@ The device periodically pushes data to the cloud (thingsboard). The system then 
 
 <h2>DEVICE</h2>
 The folder holds the python files used by NodeRed to interact with the button, buzzer, and lcd screen. The files are run through node red when the flow is deployed using the inject nodes.
+
+<h2>App</h2>
+Inside the folders backend/api, the python code to push and pull data to and from the raspberry pi is stored. These files allow the device to record the sensor readings and pushes it to the database and also pulls the alarm timings from thingsboard. The files with 2 after were used to test the device overnight on one of the raspberry pis and should be run when testing the device (those without are for the other raspberry pi and were only used for basline data).
