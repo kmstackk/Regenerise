@@ -6,7 +6,7 @@ curr_time = now.strftime("%H:%M")
 
 BASE_URL = "https://thingsboard.cs.cf.ac.uk"
 USERNAME = "group05@cardiff.ac.uk"
-PASSWORD = "group052026"
+PASSWORD = "ba431gp["
 DEVICE_ID = "c6f095a0-2df1-11f1-81d7-dd37020598c0"
 
 def get_token():
