@@ -3,7 +3,7 @@ import time
 
 BASE_URL = "https://thingsboard.cs.cf.ac.uk"
 USERNAME = "group05@cardiff.ac.uk"
-PASSWORD = "group052026"
+PASSWORD = "ba431gp["
 
 # Token state
 _token = None
