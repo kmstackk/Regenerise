@@ -1,7 +1,7 @@
 from grovepi import *
 import time
 
-buzzer = 7 
+buzzer = 2 
 
 
 while True:
